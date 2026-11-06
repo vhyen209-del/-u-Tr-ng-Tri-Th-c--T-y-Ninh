@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Tri Thức - Lịch Sử Tây Ninh</title>
+    <!-- Tailwind CSS & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- JSZip & FileSaver để tạo và tải file .zip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #e8f5e9;
+        }
+        .cute-card {
+            background: #ffffff;
+            border: 4px solid #81c784;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(76, 175, 80, 0.2);
+        }
+        .cute-btn-green {
+            background-color: #4caf50;
+            color: white;
+            border-bottom: 5px solid #2e7d32;
+            transition: all 0.1s ease;
+        }
+        .cute-btn-green:hover {
+            background-color: #66bb6a;
+        }
+        .cute-btn-green:active {
+            transform: translateY(3px);
+            border-bottom: 2px solid #2e7d32;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #a5d6a7;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-700 flex flex-col">
+
+    <!-- Audio vỗ tay -->
+    <audio id="applauseSound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Header Navigation -->
+    <header class="bg-emerald-600 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2 rounded-full text-emerald-600 font-black text-xl w-10 h-10 flex items-center justify-center border-2 border-emerald-300">🌿</div>
+                <div>
+                    <h1 class="font-extrabold text-xl leading-tight">ĐẤU TRƯỜNG TRI THỨC</h1>
+                    <p class="text-xs text-emerald-100 font-semibold">Chuyên đề: Lịch Sử Tây Ninh</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation & Zip Download -->
+            <div class="flex items-center space-x-2">
+                <button onclick="switchTab('login')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">Đăng Nhập</button>
+                <button onclick="switchTab('quiz')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">Thi Trắc Nghiệm</button>
+                <button onclick="switchTab('mc')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">MC & Admin</button>
+                <button onclick="downloadZipSource()" class="ml-2 bg-yellow-400 hover:bg-yellow-300 text-emerald-950 px-4 py-1.5 rounded-xl font-extrabold text-sm shadow-lg flex items-center gap-2 border-2 border-yellow-200">
+                    <i class="fa-solid fa-file-zipper"></i> Tải Source GitHub (.zip)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col justify-center">
+
+        <!-- SECTION 1: CỔNG ĐĂNG NHẬP 100 THÍ SINH -->
+        <section id="login-section" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <!-- Left Info Panel -->
+            <div class="md:col-span-5 flex flex-col items-center text-center p-6 bg-white rounded-3xl border-4 border-emerald-300 shadow-xl">
+                <!-- Cute Green Avatar Host -->
+                <div class="w-40 h-40 bg-emerald-100 rounded-full flex items-center justify-center relative border-4 border-emerald-400 mb-4 overflow-hidden shadow-inner">
+                    <div class="text-7xl">🕺</div>
+                    <div class="absolute bottom-1 right-2 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">MC Vest</div>
+                </div>
+                <h2 class="text-2xl font-black text-emerald-700">Chào Mừng Thí Sinh!</h2>
+                <p class="text-sm text-gray-600 mt-2 font-medium">Vui lòng nhập họ tên & chọn Số Báo Danh (SBD 001 - 100) để tham gia Đấu Trường Tri Thức Tây Ninh!</p>
+                <div class="mt-4 bg-emerald-50 border border-emerald-200 text-emerald-800 p-3 rounded-2xl text-xs font-bold w-full flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-volume-high text-emerald-600"></i>
+                    <span>Tự động phát tiếng vỗ tay rộn ràng khi thí sinh đăng nhập thành công!</span>
+                </div>
+            </div>
+
+            <!-- Right Form Panel -->
+            <div class="md:col-span-7 cute-card p-6 md:p-8">
+                <h3 class="text-xl font-black text-emerald-800 mb-4 text-center border-b-2 border-emerald-100 pb-2">
+                    <i class="fa-solid fa-user-check mr-2"></i>CỔNG ĐĂNG NHẬP THÍ SINH
+                </h3>
+                
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Họ và Tên Thí Sinh</label>
+                        <input type="text" id="studentName" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-4 py-3 rounded-2xl border-2 border-emerald-300 focus:outline-none focus:border-emerald-500 font-bold text-gray-700">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Số Báo Danh (SBD từ 1 - 100)</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="sbdInput" min="1" max="100" required placeholder="Nhập SBD..." class="w-2/3 px-4 py-3 rounded-2xl border-2 border-emerald-300 focus:outline-none focus:border-emerald-500 font-bold text-gray-700">
+                            <button type="button" onclick="showSbdGrid()" class="w-1/3 bg-emerald-100 text-emerald-800 font-bold rounded-2xl border-2 border-emerald-300 hover:bg-emerald-200 text-sm">
+                                <i class="fa-solid fa-table-cells mr-1"></i> Sơ đồ 100
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full cute-btn-green py-4 rounded-2xl font-black text-lg text-center shadow-lg uppercase tracking-wider mt-4">
+                        🚀 Đăng Nhập & Vào Thi
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: GIAO DIỆN TRẮC NGHIỆM -->
+        <section id="quiz-section" class="hidden cute-card p-6 md:p-8">
+            <div class="flex justify-between items-center border-b-2 border-emerald-100 pb-4 mb-6">
+                <div>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full">THÍ SINH: <span id="displayStudent">Nguyễn Văn A (SBD: 005)</span></span>
+                    <h2 class="text-2xl font-black text-emerald-800 mt-1">VÒNG 1: KHỞI ĐỘNG</h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-bold text-gray-500">Thời gian còn lại</span>
+                    <div class="text-2xl font-black text-emerald-600">00:30</div>
+                </div>
+            </div>
+
+            <!-- Single Question Card -->
+            <div class="bg-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 mb-6">
+                <span class="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1 rounded-lg">Câu hỏi 1 / 10</span>
+                <p class="text-lg font-bold text-gray-800 mt-3">Địa danh nổi tiếng nào được mệnh danh là "Nóc nhà Nam Bộ" nằm tại tỉnh Tây Ninh?</p>
+            </div>
+
+            <!-- Answer Options -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">A</span>
+                    Núi Bà Đen
+                </button>
+                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">B</span>
+                    Núi Cấm
+                </button>
+                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">C</span>
+                    Núi Chứa Chan
+                </button>
+                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">D</span>
+                    Núi Ba Bà
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: MAN HINH CONTROL MC VÀ ADMIN -->
+        <section id="mc-section" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- MC Visual & Speech -->
+            <div class="md:col-span-5 cute-card p-6 flex flex-col items-center text-center">
+                <!-- MC Character Design -->
+                <div class="w-48 h-56 bg-emerald-100 rounded-3xl border-4 border-emerald-400 relative flex flex-col items-center justify-center mb-4 shadow-md">
+                    <div class="text-8xl">👔</div>
+                    <div class="absolute bottom-3 bg-gray-800 text-emerald-300 px-3 py-1 rounded-xl text-xs font-mono font-bold border border-emerald-400 shadow">
+                        📱 Tablet Controller
+                    </div>
+                </div>
+                <h3 class="text-xl font-black text-emerald-800">MC DẪN CHƯƠNG TRÌNH</h3>
+                <p class="text-xs font-bold text-gray-500 mb-3">Mặc Vest sang trọng - Cầm Tablet điều khiển</p>
+
+                <div class="bg-emerald-50 border-2 border-emerald-300 p-4 rounded-2xl text-sm font-semibold text-emerald-900 relative w-full">
+                    <div class="font-bold text-emerald-700 mb-1"><i class="fa-solid fa-microphone mr-1"></i> Lời thoại MC:</div>
+                    "Chào mừng 100 thí sinh đến với Đấu Trường Tri Thức Tây Ninh! Hãy chuẩn bị tinh thần bước vào Vòng thi thứ nhất!"
+                </div>
+                
+                <button onclick="playApplauseSound()" class="mt-4 cute-btn-green px-4 py-2 rounded-xl text-sm font-bold w-full">
+                    👏 Phát Tiếng Vỗ Tay
+                </button>
+            </div>
+
+            <!-- Admin Live Stats -->
+            <div class="md:col-span-7 cute-card p-6">
+                <h3 class="text-xl font-black text-emerald-800 mb-4 border-b-2 border-emerald-100 pb-2">
+                    <i class="fa-solid fa-chart-line mr-2"></i>BẢNG ĐIỀU KHIỂN SỐ LIỆU (REALTIME)
+                </h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                        <span class="text-xs font-bold text-gray-500">Tổng Thí Sinh Đã Đăng Nhập</span>
+                        <div class="text-3xl font-black text-emerald-700">100 / 100</div>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                        <span class="text-xs font-bold text-gray-500">Vòng Thi Hiện Tại</span>
+                        <div class="text-3xl font-black text-emerald-700">Vòng 1 (1/4)</div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard sample -->
+                <h4 class="font-extrabold text-gray-700 mb-2 text-sm">Top Thí Sinh Dẫn Đầu:</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-3 bg-yellow-50 border border-yellow-200 rounded-xl font-bold text-sm">
+                        <span>🥇 SBD 012 - Nguyễn Trần Bình</span>
+                        <span class="text-yellow-700">100 điểm</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm">
+                        <span>🥈 SBD 045 - Lê Hoàng Yến</span>
+                        <span class="text-emerald-700">90 điểm</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal chọn SBD trong 100 ô -->
+    <div id="sbdModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl border-4 border-emerald-400 p-6 max-w-2xl w-full max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-black text-lg text-emerald-800">SƠ ĐỒ 100 SỐ BÁO DANH THÍ SINH</h3>
+                <button onclick="closeSbdGrid()" class="text-gray-400 hover:text-gray-600 font-black text-xl">&times;</button>
+            </div>
+            <div id="sbdGridContainer" class="grid grid-cols-10 gap-2 overflow-y-auto p-2 custom-scrollbar flex-1">
+                <!-- Javascript sẽ tự sinh 100 ô SBD -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script điều khiển -->
+    <script>
+        // Hàm phát tiếng vỗ tay rộn ràng
+        function playApplauseSound() {
+            const sound = document.getElementById('applauseSound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Tự động phát âm thanh bị chặn bởi trình duyệt:', e));
+            }
+        }
+
+        // Chuyển Tab Giao diện
+        function switchTab(tab) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('quiz-section').classList.add('hidden');
+            document.getElementById('mc-section').classList.add('hidden');
+
+            if (tab === 'login') document.getElementById('login-section').classList.remove('hidden');
+            if (tab === 'quiz') document.getElementById('quiz-section').classList.remove('hidden');
+            if (tab === 'mc') document.getElementById('mc-section').classList.remove('hidden');
+        }
+
+        // Xử lý Đăng nhập thí sinh + Phát Tiếng Vỗ Tay
+        function handleLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            const sbd = document.getElementById('sbdInput').value;
+            
+            // 1. Phát âm thanh vỗ tay chúc mừng
+            playApplauseSound();
+
+            // 2. Cập nhật giao diện làm bài
+            document.getElementById('displayStudent').innerText = `${name} (SBD: ${String(sbd).padStart(3, '0')})`;
+            
+            // 3. Thông báo & Chuyển sang phần trắc nghiệm
+            setTimeout(() => {
+                alert(`🎉 Đăng nhập thành công!\nChào mừng thí sinh SBD ${sbd} - ${name}`);
+                switchTab('quiz');
+            }, 300);
+        }
+
+        // Hiển thị 100 SBD dạng ô bàn cờ
+        function showSbdGrid() {
+            const container = document.getElementById('sbdGridContainer');
+            container.innerHTML = '';
+            for (let i = 1; i <= 100; i++) {
+                const btn = document.createElement('button');
+                const formattedSBD = String(i).padStart(3, '0');
+                btn.className = 'py-2 border border-emerald-300 rounded-lg font-bold text-xs hover:bg-emerald-500 hover:text-white transition';
+                btn.innerText = formattedSBD;
+                btn.onclick = function() {
+                    document.getElementById('sbdInput').value = i;
+                    closeSbdGrid();
+                };
+                container.appendChild(btn);
+            }
+            document.getElementById('sbdModal').classList.remove('hidden');
+        }
+
+        function closeSbdGrid() {
+            document.getElementById('sbdModal').classList.add('hidden');
+        }
+
+        // Tải xuống file ZIP trọn gói mã nguồn
+        function downloadZipSource() {
+            const zip = new JSZip();
+            const pageCode = document.documentElement.outerHTML;
+            zip.file("index.html", pageCode);
+            zip.generateAsync({ type: "blob" }).then(function(content) {
+                saveAs(content, "DauTruongTriThuc_TayNinh.zip");
+            });
+        }
+    </script>
+</body>
+  </html>
+  
