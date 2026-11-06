@@ -1,312 +1,431 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đấu Trường Tri Thức - Lịch Sử Tây Ninh</title>
-    <!-- Tailwind CSS & FontAwesome -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- JSZip & FileSaver để tạo và tải file .zip -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #e8f5e9;
-        }
-        .cute-card {
-            background: #ffffff;
-            border: 4px solid #81c784;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(76, 175, 80, 0.2);
-        }
-        .cute-btn-green {
-            background-color: #4caf50;
-            color: white;
-            border-bottom: 5px solid #2e7d32;
-            transition: all 0.1s ease;
-        }
-        .cute-btn-green:hover {
-            background-color: #66bb6a;
-        }
-        .cute-btn-green:active {
-            transform: translateY(3px);
-            border-bottom: 2px solid #2e7d32;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #a5d6a7;
-            border-radius: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đấu Trường Tri Thức | Lịch sử Tây Ninh</title>
+<style>
+:root{
+ --navy:#07152f;--blue:#102b55;--gold:#f6c75b;
+ --gold2:#ffe6a0;--white:#fff;--muted:#b9c9df;
+ --green:#35c58b;--red:#ff6677;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;color:white;
+ background:radial-gradient(ellipse at top,#173d70 0%,#091a37 48%,#040b19 100%);
+ min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.topbar{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:12px;padding:15px 5%;background:#061126;
+ border-bottom:2px solid #d6a944;position:sticky;top:0;z-index:10;
+}
+.brand{font-size:18px;font-weight:900;color:var(--gold)}
+.brand small{display:block;font-size:11px;color:#d9e5f5;margin-top:5px}
+.nav{display:flex;gap:7px;flex-wrap:wrap}
+.nav button,.btn{
+ border:1px solid #bd984a;border-radius:9px;padding:10px 14px;
+ color:white;background:#18365f;font-weight:bold;
+}
+.nav button:hover,.btn:hover{background:#28517e}
+.btn.gold{background:linear-gradient(135deg,#ffe49b,#d99e2f);color:#17213b;border:0}
+.btn.green{background:#147c5c;border:0}
+.btn.red{background:#9d3042;border:0}
+main{max-width:1100px;margin:auto;padding:25px 16px 55px}
+.panel{
+ background:linear-gradient(145deg,#122c50,#0b1d38);
+ border:1px solid #8f7137;border-radius:20px;
+ box-shadow:0 12px 35px #0007;padding:25px;
+}
+.hidden{display:none!important}
+.hero{text-align:center;padding:55px 20px 45px}
+.eyebrow{color:var(--gold);letter-spacing:4px;font-size:12px;font-weight:bold}
+.hero h1{
+ font-size:clamp(32px,7vw,65px);line-height:1.12;
+ color:var(--gold2);text-shadow:0 4px 20px #e9ad3955;margin:18px 0;
+}
+.hero p{color:var(--muted);max-width:650px;margin:15px auto;line-height:1.8}
+.stage-icon{font-size:65px;margin:15px}
+.goldline{height:2px;background:linear-gradient(90deg,transparent,#e8bd59,transparent);margin:20px 0}
+.section-title{text-align:center;color:var(--gold2);font-size:26px;margin:8px 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+.feature{
+ background:#102747;border:1px solid #47658c;border-radius:14px;
+ padding:20px;text-align:center;
+}
+.feature .ico{font-size:34px}
+.feature h3{color:var(--gold);margin:10px 0}
+.feature p{font-size:14px;color:var(--muted);line-height:1.6}
+input{
+ width:100%;padding:14px;border:2px solid #536f91;
+ background:#07172e;color:white;border-radius:10px;margin:7px 0 16px;
+ outline:none;
+}
+input:focus{border-color:var(--gold)}
+label{font-weight:bold;color:var(--gold2);font-size:14px}
+.formbox{max-width:520px;margin:auto}
+.center{text-align:center}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.stat{background:#091b34;border:1px solid #526c8c;border-radius:12px;padding:15px;text-align:center}
+.stat strong{display:block;color:var(--gold);font-size:25px;margin-top:5px}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.pill{background:#263f63;padding:8px 12px;border-radius:30px;color:var(--gold2);font-size:13px;font-weight:bold}
+.timer{
+ width:65px;height:65px;border:4px solid var(--gold);border-radius:50%;
+ display:grid;place-items:center;color:var(--gold);font-size:25px;font-weight:900;
+}
+.progress{height:9px;background:#263d5d;border-radius:10px;overflow:hidden;margin:20px 0}
+.progress div{height:100%;background:linear-gradient(90deg,#e6a832,#ffe49b);width:0%;transition:width .3s}
+.question{
+ background:#07182f;border:1px solid #9b7b3e;border-radius:15px;
+ padding:25px;margin:20px 0;text-align:center;
+}
+.question h2{font-size:clamp(19px,4vw,26px);line-height:1.5}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.answer{
+ background:#17375e;color:white;border:2px solid #52749a;
+ border-radius:12px;padding:17px;text-align:left;font-weight:bold;
+ min-height:65px;
+}
+.answer:hover:not(:disabled){border-color:var(--gold);background:#254b78}
+.answer.correct{background:#126d51;border-color:#4ce3a8}
+.answer.wrong{background:#842d3d;border-color:#ff7b89}
+.answer:disabled{cursor:default;opacity:1}
+.feedback{font-size:17px;font-weight:bold;text-align:center;min-height:28px;margin:16px}
+.result-score{font-size:60px;color:var(--gold);font-weight:900}
+.table{width:100%;border-collapse:collapse;margin-top:15px}
+.table th,.table td{padding:12px 8px;text-align:left;border-bottom:1px solid #385171}
+.table th{color:var(--gold)}
+.table-wrap{overflow-x:auto}
+.hostbox{background:#081a32;border:1px solid #425f80;border-radius:13px;padding:18px;margin:12px 0}
+footer{text-align:center;color:#8ea6c4;padding:25px;font-size:13px}
+.small{font-size:12px;color:#9db0c9;line-height:1.6}
+@media(max-width:600px){
+ .topbar{align-items:flex-start;flex-direction:column}
+ .nav{width:100%}
+ .nav button{flex:1;font-size:12px;padding:9px 5px}
+ .panel{padding:17px}
+ .answers{grid-template-columns:1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .hero{padding:35px 8px}
+}
+</style>
 </head>
-<body class="min-h-screen text-slate-700 flex flex-col">
+<body>
 
-    <!-- Audio vỗ tay -->
-    <audio id="applauseSound" preload="auto">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
-    </audio>
+<header class="topbar">
+ <div class="brand">🏆 ĐẤU TRƯỜNG TRI THỨC
+  <small>GAME SHOW LỊCH SỬ TÂY NINH</small>
+ </div>
+ <nav class="nav">
+  <button onclick="showPage('home')">Trang chủ</button>
+  <button onclick="showPage('rules')">Luật chơi</button>
+  <button onclick="showPage('register')">Thí sinh</button>
+  <button onclick="showPage('ranking')">Xếp hạng</button>
+  <button onclick="showPage('host')">MC & Admin</button>
+ </nav>
+</header>
 
-    <!-- Header Navigation -->
-    <header class="bg-emerald-600 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white p-2 rounded-full text-emerald-600 font-black text-xl w-10 h-10 flex items-center justify-center border-2 border-emerald-300">🌿</div>
-                <div>
-                    <h1 class="font-extrabold text-xl leading-tight">ĐẤU TRƯỜNG TRI THỨC</h1>
-                    <p class="text-xs text-emerald-100 font-semibold">Chuyên đề: Lịch Sử Tây Ninh</p>
-                </div>
-            </div>
+<main>
 
-            <!-- Tab Navigation & Zip Download -->
-            <div class="flex items-center space-x-2">
-                <button onclick="switchTab('login')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">Đăng Nhập</button>
-                <button onclick="switchTab('quiz')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">Thi Trắc Nghiệm</button>
-                <button onclick="switchTab('mc')" class="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-700 hover:bg-emerald-800 transition">MC & Admin</button>
-                <button onclick="downloadZipSource()" class="ml-2 bg-yellow-400 hover:bg-yellow-300 text-emerald-950 px-4 py-1.5 rounded-xl font-extrabold text-sm shadow-lg flex items-center gap-2 border-2 border-yellow-200">
-                    <i class="fa-solid fa-file-zipper"></i> Tải Source GitHub (.zip)
-                </button>
-            </div>
-        </div>
-    </header>
+<!-- TRANG CHỦ -->
+<section id="home" class="panel hero">
+ <div class="eyebrow">CHƯƠNG TRÌNH GIÁO DỤC • KHÁM PHÁ LỊCH SỬ</div>
+ <div class="stage-icon">🏛️</div>
+ <h1>ĐẤU TRƯỜNG<br>TRI THỨC</h1>
+ <div class="goldline"></div>
+ <h2 style="color:#fff">LỊCH SỬ TÂY NINH</h2>
+ <p>Hành trình khám phá vùng đất giàu truyền thống cách mạng, văn hóa và những dấu ấn lịch sử đáng tự hào. Bạn đã sẵn sàng chinh phục thử thách?</p>
+ <button class="btn gold" onclick="showPage('register')">🎤 THAM GIA NGAY</button>
+ <button class="btn" onclick="showPage('rules')">Xem luật chơi</button>
+ <div class="stats">
+  <div class="stat">Số câu hỏi<strong>10</strong></div>
+  <div class="stat">Thời gian/câu<strong>20s</strong></div>
+  <div class="stat">Điểm tối đa<strong>100</strong></div>
+ </div>
+</section>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col justify-center">
+<!-- LUẬT CHƠI -->
+<section id="rules" class="panel hidden">
+ <h2 class="section-title">📜 THỂ LỆ CHƯƠNG TRÌNH</h2>
+ <div class="grid">
+  <div class="feature"><div class="ico">👤</div><h3>Đăng ký</h3><p>Nhập họ tên và số báo danh từ 001 đến 100.</p></div>
+  <div class="feature"><div class="ico">❓</div><h3>10 câu hỏi</h3><p>Mỗi câu có 4 phương án. Chọn một đáp án mà bạn cho là chính xác.</p></div>
+  <div class="feature"><div class="ico">⏱️</div><h3>20 giây</h3><p>Mỗi câu có 20 giây suy nghĩ. Hết giờ sẽ tự động chuyển câu.</p></div>
+  <div class="feature"><div class="ico">🏆</div><h3>Tính điểm</h3><p>Trả lời đúng được 10 điểm. Trả lời sai hoặc hết giờ không có điểm.</p></div>
+ </div>
+ <div class="goldline"></div>
+ <p class="center muted">Tổng điểm tối đa: 100 điểm. Kết quả được lưu trên trình duyệt của thiết bị đang chơi.</p>
+ <div class="center"><button class="btn gold" onclick="showPage('register')">ĐÃ HIỂU – BẮT ĐẦU</button></div>
+</section>
 
-        <!-- SECTION 1: CỔNG ĐĂNG NHẬP 100 THÍ SINH -->
-        <section id="login-section" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            <!-- Left Info Panel -->
-            <div class="md:col-span-5 flex flex-col items-center text-center p-6 bg-white rounded-3xl border-4 border-emerald-300 shadow-xl">
-                <!-- Cute Green Avatar Host -->
-                <div class="w-40 h-40 bg-emerald-100 rounded-full flex items-center justify-center relative border-4 border-emerald-400 mb-4 overflow-hidden shadow-inner">
-                    <div class="text-7xl">🕺</div>
-                    <div class="absolute bottom-1 right-2 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">MC Vest</div>
-                </div>
-                <h2 class="text-2xl font-black text-emerald-700">Chào Mừng Thí Sinh!</h2>
-                <p class="text-sm text-gray-600 mt-2 font-medium">Vui lòng nhập họ tên & chọn Số Báo Danh (SBD 001 - 100) để tham gia Đấu Trường Tri Thức Tây Ninh!</p>
-                <div class="mt-4 bg-emerald-50 border border-emerald-200 text-emerald-800 p-3 rounded-2xl text-xs font-bold w-full flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-volume-high text-emerald-600"></i>
-                    <span>Tự động phát tiếng vỗ tay rộn ràng khi thí sinh đăng nhập thành công!</span>
-                </div>
-            </div>
+<!-- ĐĂNG KÝ -->
+<section id="register" class="panel hidden">
+ <h2 class="section-title">🎙️ CỔNG ĐĂNG KÝ THÍ SINH</h2>
+ <div class="formbox">
+  <label for="playerName">HỌ VÀ TÊN</label>
+  <input id="playerName" maxlength="60" placeholder="Nhập họ và tên của bạn">
+  <label for="playerSbd">SỐ BÁO DANH (001–100)</label>
+  <input id="playerSbd" type="number" min="1" max="100" placeholder="Ví dụ: 12">
+  <p id="registerError" class="small" style="color:#ff9da8"></p>
+  <button class="btn gold" style="width:100%" onclick="registerPlayer()">XÁC NHẬN & VÀO SÂN KHẤU</button>
+ </div>
+</section>
 
-            <!-- Right Form Panel -->
-            <div class="md:col-span-7 cute-card p-6 md:p-8">
-                <h3 class="text-xl font-black text-emerald-800 mb-4 text-center border-b-2 border-emerald-100 pb-2">
-                    <i class="fa-solid fa-user-check mr-2"></i>CỔNG ĐĂNG NHẬP THÍ SINH
-                </h3>
-                
-                <form onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Họ và Tên Thí Sinh</label>
-                        <input type="text" id="studentName" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-4 py-3 rounded-2xl border-2 border-emerald-300 focus:outline-none focus:border-emerald-500 font-bold text-gray-700">
-                    </div>
+<!-- TRÒ CHƠI -->
+<section id="game" class="panel hidden">
+ <div class="quiz-head">
+  <div>
+   <span class="pill" id="playerBadge">THÍ SINH</span>
+   <h2 style="color:var(--gold);margin-bottom:0">VÒNG THI: KHỞI ĐỘNG</h2>
+   <span class="small" id="questionNumber">CÂU 1/10</span>
+  </div>
+  <div class="timer" id="timer">20</div>
+ </div>
+ <div class="progress"><div id="progressBar"></div></div>
+ <div class="question">
+  <span class="pill">CÂU HỎI LỊCH SỬ TÂY NINH</span>
+  <h2 id="questionText">Câu hỏi sẽ xuất hiện tại đây</h2>
+ </div>
+ <div class="answers" id="answerList"></div>
+ <div class="feedback" id="feedback"></div>
+ <div class="center">
+  <button id="nextButton" class="btn gold hidden" onclick="nextQuestion()">CÂU TIẾP THEO →</button>
+ </div>
+ <p class="small center" style="margin-top:18px">Mỗi câu trả lời đúng được 10 điểm.</p>
+</section>
 
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Số Báo Danh (SBD từ 1 - 100)</label>
-                        <div class="flex gap-2">
-                            <input type="number" id="sbdInput" min="1" max="100" required placeholder="Nhập SBD..." class="w-2/3 px-4 py-3 rounded-2xl border-2 border-emerald-300 focus:outline-none focus:border-emerald-500 font-bold text-gray-700">
-                            <button type="button" onclick="showSbdGrid()" class="w-1/3 bg-emerald-100 text-emerald-800 font-bold rounded-2xl border-2 border-emerald-300 hover:bg-emerald-200 text-sm">
-                                <i class="fa-solid fa-table-cells mr-1"></i> Sơ đồ 100
-                            </button>
-                        </div>
-                    </div>
+<!-- KẾT QUẢ -->
+<section id="result" class="panel hidden center">
+ <div style="font-size:55px">🏆</div>
+ <h2 class="section-title">CHÚC MỪNG BẠN HOÀN THÀNH!</h2>
+ <p id="resultName" class="muted"></p>
+ <div class="result-score" id="finalScore">0</div>
+ <p style="color:var(--gold)">ĐIỂM SỐ / 100</p>
+ <div class="goldline"></div>
+ <p id="resultMessage"></p>
+ <button class="btn gold" onclick="showPage('ranking')">XEM BẢNG XẾP HẠNG</button>
+ <button class="btn" onclick="showPage('register')">THÍ SINH TIẾP THEO</button>
+</section>
 
-                    <button type="submit" class="w-full cute-btn-green py-4 rounded-2xl font-black text-lg text-center shadow-lg uppercase tracking-wider mt-4">
-                        🚀 Đăng Nhập & Vào Thi
-                    </button>
-                </form>
-            </div>
-        </section>
+<!-- BẢNG XẾP HẠNG -->
+<section id="ranking" class="panel hidden">
+ <h2 class="section-title">🥇 BẢNG VÀNG VINH DANH</h2>
+ <p class="center muted">Thành tích được lưu trên thiết bị hiện tại.</p>
+ <div class="table-wrap">
+  <table class="table">
+   <thead><tr><th>Hạng</th><th>Thí sinh</th><th>SBD</th><th>Điểm</th></tr></thead>
+   <tbody id="rankingBody"></tbody>
+  </table>
+ </div>
+ <p id="emptyRanking" class="center muted">Chưa có thí sinh hoàn thành phần thi.</p>
+ <div class="center" style="margin-top:20px">
+  <button class="btn gold" onclick="showPage('register')">THAM GIA THI</button>
+ </div>
+</section>
 
-        <!-- SECTION 2: GIAO DIỆN TRẮC NGHIỆM -->
-        <section id="quiz-section" class="hidden cute-card p-6 md:p-8">
-            <div class="flex justify-between items-center border-b-2 border-emerald-100 pb-4 mb-6">
-                <div>
-                    <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full">THÍ SINH: <span id="displayStudent">Nguyễn Văn A (SBD: 005)</span></span>
-                    <h2 class="text-2xl font-black text-emerald-800 mt-1">VÒNG 1: KHỞI ĐỘNG</h2>
-                </div>
-                <div class="text-right">
-                    <span class="text-xs font-bold text-gray-500">Thời gian còn lại</span>
-                    <div class="text-2xl font-black text-emerald-600">00:30</div>
-                </div>
-            </div>
+<!-- MC VÀ ADMIN -->
+<section id="host" class="panel hidden">
+ <h2 class="section-title">🎤 PHÒNG ĐIỀU KHIỂN MC & ADMIN</h2>
+ <div class="grid">
+  <div class="feature">
+   <div class="ico">🎙️</div><h3>Lời dẫn MC</h3>
+   <p id="mcText">Kính chào quý thầy cô và các bạn! Chào mừng đến với Đấu Trường Tri Thức – Lịch sử Tây Ninh!</p>
+   <button class="btn gold" onclick="speakMC()">🔊 ĐỌC LỜI DẪN</button>
+  </div>
+  <div class="feature">
+   <div class="ico">📊</div><h3>Thống kê</h3>
+   <p>Số lượt hoàn thành:</p>
+   <strong id="totalPlayers" style="font-size:32px;color:var(--gold)">0</strong>
+   <p>Tổng số thí sinh có kết quả trên thiết bị.</p>
+  </div>
+ </div>
+ <div class="hostbox">
+  <h3 style="color:var(--gold)">📢 Lời dẫn chương trình</h3>
+  <p class="muted">“Các thí sinh đã sẵn sàng chưa? Hãy cùng bước vào hành trình khám phá lịch sử, văn hóa và những địa danh tiêu biểu của Tây Ninh. Chúc các bạn bình tĩnh, tự tin và đạt kết quả cao!”</p>
+ </div>
+ <div class="hostbox">
+  <h3 style="color:var(--gold)">⚙️ Quản lý dữ liệu trên thiết bị</h3>
+  <p class="small">Chức năng xóa kết quả chỉ tác động đến bảng xếp hạng lưu trên trình duyệt này.</p>
+  <button class="btn red" onclick="resetRanking()">XÓA BẢNG XẾP HẠNG</button>
+ </div>
+ <p class="small">Lưu ý: Đây là bảng điều khiển mô phỏng dành cho bản trình diễn. Chưa có hệ thống quản trị bảo mật hoặc dữ liệu đồng bộ nhiều thiết bị.</p>
+</section>
 
-            <!-- Single Question Card -->
-            <div class="bg-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 mb-6">
-                <span class="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1 rounded-lg">Câu hỏi 1 / 10</span>
-                <p class="text-lg font-bold text-gray-800 mt-3">Địa danh nổi tiếng nào được mệnh danh là "Nóc nhà Nam Bộ" nằm tại tỉnh Tây Ninh?</p>
-            </div>
+<!-- TƯ LIỆU -->
+<section id="library" class="panel hidden">
+ <h2 class="section-title">📚 GÓC KIẾN THỨC LỊCH SỬ</h2>
+ <div class="grid">
+  <div class="feature"><div class="ico">⛰️</div><h3>Núi Bà Đen</h3><p>Địa danh nổi tiếng, được biết đến là ngọn núi cao nhất Nam Bộ.</p></div>
+  <div class="feature"><div class="ico">🏛️</div><h3>Tòa Thánh Tây Ninh</h3><p>Công trình kiến trúc tôn giáo tiêu biểu gắn với đạo Cao Đài.</p></div>
+  <div class="feature"><div class="ico">📜</div><h3>Di tích Tua Hai</h3><p>Địa danh gắn với sự kiện lịch sử diễn ra vào tháng 1 năm 1960.</p></div>
+  <div class="feature"><div class="ico">🌳</div><h3>Lò Gò – Xa Mát</h3><p>Khu vực có giá trị về đa dạng sinh học và lịch sử cách mạng.</p></div>
+  <div class="feature"><div class="ico">💧</div><h3>Hồ Dầu Tiếng</h3><p>Công trình thủy lợi lớn, có vai trò quan trọng đối với sản xuất và đời sống.</p></div>
+  <div class="feature"><div class="ico">🗺️</div><h3>Căn cứ Trung ương Cục miền Nam</h3><p>Địa điểm lịch sử quan trọng trong cuộc kháng chiến chống Mỹ.</p></div>
+ </div>
+ <p class="small center" style="margin-top:20px">Tư liệu giới thiệu khái quát, phục vụ học tập và ôn tập.</p>
+</section>
 
-            <!-- Answer Options -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
-                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">A</span>
-                    Núi Bà Đen
-                </button>
-                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
-                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">B</span>
-                    Núi Cấm
-                </button>
-                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
-                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">C</span>
-                    Núi Chứa Chan
-                </button>
-                <button onclick="playApplauseSound()" class="p-4 rounded-2xl bg-white border-2 border-emerald-300 hover:bg-emerald-100 text-left font-extrabold text-emerald-900 transition flex items-center">
-                    <span class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center mr-3">D</span>
-                    Núi Ba Bà
-                </button>
-            </div>
-        </section>
+</main>
+<footer>
+ <div class="goldline"></div>
+ 🏆 ĐẤU TRƯỜNG TRI THỨC – LỊCH SỬ TÂY NINH
+ <p>Học lịch sử hôm nay – Tự hào truyền thống ngày mai.</p>
+ <p>© 2026 | Sản phẩm học tập Tin học</p>
+</footer>
 
-        <!-- SECTION 3: MAN HINH CONTROL MC VÀ ADMIN -->
-        <section id="mc-section" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- MC Visual & Speech -->
-            <div class="md:col-span-5 cute-card p-6 flex flex-col items-center text-center">
-                <!-- MC Character Design -->
-                <div class="w-48 h-56 bg-emerald-100 rounded-3xl border-4 border-emerald-400 relative flex flex-col items-center justify-center mb-4 shadow-md">
-                    <div class="text-8xl">👔</div>
-                    <div class="absolute bottom-3 bg-gray-800 text-emerald-300 px-3 py-1 rounded-xl text-xs font-mono font-bold border border-emerald-400 shadow">
-                        📱 Tablet Controller
-                    </div>
-                </div>
-                <h3 class="text-xl font-black text-emerald-800">MC DẪN CHƯƠNG TRÌNH</h3>
-                <p class="text-xs font-bold text-gray-500 mb-3">Mặc Vest sang trọng - Cầm Tablet điều khiển</p>
+<script>
+const questions=[
+ {q:"Địa danh nào được mệnh danh là “Nóc nhà Nam Bộ” và nằm tại Tây Ninh?",a:["Núi Bà Đen","Núi Cấm","Núi Chứa Chan","Núi Thị Vải"],c:0,why:"Núi Bà Đen cao khoảng 986 m, là ngọn núi nổi tiếng và cao nhất Nam Bộ."},
+ {q:"Tòa Thánh Tây Ninh gắn liền với tôn giáo nào?",a:["Phật giáo","Cao Đài","Công giáo","Tin Lành"],c:1,why:"Tòa Thánh Tây Ninh là công trình trung tâm của đạo Cao Đài."},
+ {q:"Sự kiện Tua Hai diễn ra vào năm nào?",a:["1945","1954","1960","1975"],c:2,why:"Trận đánh Tua Hai diễn ra vào tháng 1 năm 1960, là sự kiện quan trọng trong phong trào Đồng khởi ở miền Nam."},
+ {q:"Hồ Dầu Tiếng có vai trò nổi bật nào?",a:["Cảng biển quốc tế","Công trình thủy lợi","Sân bay quân sự","Khu khai thác than"],c:1,why:"Hồ Dầu Tiếng là công trình thủy lợi lớn, phục vụ tưới tiêu và nhiều nhu cầu dân sinh."},
+ {q:"Vườn quốc gia Lò Gò – Xa Mát thuộc tỉnh nào trước đợt sắp xếp hành chính năm 2025?",a:["Tây Ninh","Đồng Nai","Bình Thuận","Bình Dương"],c:0,why:"Vườn quốc gia Lò Gò – Xa Mát thuộc tỉnh Tây Ninh trước đợt sắp xếp hành chính năm 2025."},
+ {q:"Căn cứ Trung ương Cục miền Nam gắn với giai đoạn lịch sử nào?",a:["Thời Văn Lang","Kháng chiến chống Mỹ","Thời nhà Nguyễn","Thời kỳ Bắc thuộc"],c:1,why:"Đây là cơ quan lãnh đạo cách mạng miền Nam trong thời kỳ kháng chiến chống Mỹ."},
+ {q:"Di tích Tua Hai gắn với địa phương nào?",a:["Tây Ninh","Huế","Hà Nội","Cần Thơ"],c:0,why:"Di tích Tua Hai nằm tại Tây Ninh và gắn với sự kiện lịch sử năm 1960."},
+ {q:"Đạo Cao Đài ra đời ở Nam Bộ vào khoảng thời gian nào?",a:["Đầu thế kỷ XX","Thế kỷ XV","Thế kỷ XVII","Cuối thế kỷ XIX"],c:0,why:"Đạo Cao Đài chính thức khai đạo năm 1926 tại Nam Bộ."},
+ {q:"Núi Bà Đen có ý nghĩa nổi bật nào đối với Tây Ninh?",a:["Trung tâm khai thác dầu khí","Biểu tượng du lịch và văn hóa","Cảng hàng không","Khu công nghiệp lớn"],c:1,why:"Núi Bà Đen là biểu tượng du lịch, văn hóa nổi bật của Tây Ninh."},
+ {q:"Tây Ninh có vị trí địa lý tiếp giáp quốc gia nào?",a:["Lào","Thái Lan","Campuchia","Malaysia"],c:2,why:"Tây Ninh có đường biên giới giáp Campuchia."}
+];
 
-                <div class="bg-emerald-50 border-2 border-emerald-300 p-4 rounded-2xl text-sm font-semibold text-emerald-900 relative w-full">
-                    <div class="font-bold text-emerald-700 mb-1"><i class="fa-solid fa-microphone mr-1"></i> Lời thoại MC:</div>
-                    "Chào mừng 100 thí sinh đến với Đấu Trường Tri Thức Tây Ninh! Hãy chuẩn bị tinh thần bước vào Vòng thi thứ nhất!"
-                </div>
-                
-                <button onclick="playApplauseSound()" class="mt-4 cute-btn-green px-4 py-2 rounded-xl text-sm font-bold w-full">
-                    👏 Phát Tiếng Vỗ Tay
-                </button>
-            </div>
-
-            <!-- Admin Live Stats -->
-            <div class="md:col-span-7 cute-card p-6">
-                <h3 class="text-xl font-black text-emerald-800 mb-4 border-b-2 border-emerald-100 pb-2">
-                    <i class="fa-solid fa-chart-line mr-2"></i>BẢNG ĐIỀU KHIỂN SỐ LIỆU (REALTIME)
-                </h3>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
-                        <span class="text-xs font-bold text-gray-500">Tổng Thí Sinh Đã Đăng Nhập</span>
-                        <div class="text-3xl font-black text-emerald-700">100 / 100</div>
-                    </div>
-                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
-                        <span class="text-xs font-bold text-gray-500">Vòng Thi Hiện Tại</span>
-                        <div class="text-3xl font-black text-emerald-700">Vòng 1 (1/4)</div>
-                    </div>
-                </div>
-
-                <!-- Leaderboard sample -->
-                <h4 class="font-extrabold text-gray-700 mb-2 text-sm">Top Thí Sinh Dẫn Đầu:</h4>
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center p-3 bg-yellow-50 border border-yellow-200 rounded-xl font-bold text-sm">
-                        <span>🥇 SBD 012 - Nguyễn Trần Bình</span>
-                        <span class="text-yellow-700">100 điểm</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm">
-                        <span>🥈 SBD 045 - Lê Hoàng Yến</span>
-                        <span class="text-emerald-700">90 điểm</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Modal chọn SBD trong 100 ô -->
-    <div id="sbdModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl border-4 border-emerald-400 p-6 max-w-2xl w-full max-h-[80vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-black text-lg text-emerald-800">SƠ ĐỒ 100 SỐ BÁO DANH THÍ SINH</h3>
-                <button onclick="closeSbdGrid()" class="text-gray-400 hover:text-gray-600 font-black text-xl">&times;</button>
-            </div>
-            <div id="sbdGridContainer" class="grid grid-cols-10 gap-2 overflow-y-auto p-2 custom-scrollbar flex-1">
-                <!-- Javascript sẽ tự sinh 100 ô SBD -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Script điều khiển -->
-    <script>
-        // Hàm phát tiếng vỗ tay rộn ràng
-        function playApplauseSound() {
-            const sound = document.getElementById('applauseSound');
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log('Tự động phát âm thanh bị chặn bởi trình duyệt:', e));
-            }
-        }
-
-        // Chuyển Tab Giao diện
-        function switchTab(tab) {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('quiz-section').classList.add('hidden');
-            document.getElementById('mc-section').classList.add('hidden');
-
-            if (tab === 'login') document.getElementById('login-section').classList.remove('hidden');
-            if (tab === 'quiz') document.getElementById('quiz-section').classList.remove('hidden');
-            if (tab === 'mc') document.getElementById('mc-section').classList.remove('hidden');
-        }
-
-        // Xử lý Đăng nhập thí sinh + Phát Tiếng Vỗ Tay
-        function handleLogin(e) {
-            e.preventDefault();
-            const name = document.getElementById('studentName').value;
-            const sbd = document.getElementById('sbdInput').value;
-            
-            // 1. Phát âm thanh vỗ tay chúc mừng
-            playApplauseSound();
-
-            // 2. Cập nhật giao diện làm bài
-            document.getElementById('displayStudent').innerText = `${name} (SBD: ${String(sbd).padStart(3, '0')})`;
-            
-            // 3. Thông báo & Chuyển sang phần trắc nghiệm
-            setTimeout(() => {
-                alert(`🎉 Đăng nhập thành công!\nChào mừng thí sinh SBD ${sbd} - ${name}`);
-                switchTab('quiz');
-            }, 300);
-        }
-
-        // Hiển thị 100 SBD dạng ô bàn cờ
-        function showSbdGrid() {
-            const container = document.getElementById('sbdGridContainer');
-            container.innerHTML = '';
-            for (let i = 1; i <= 100; i++) {
-                const btn = document.createElement('button');
-                const formattedSBD = String(i).padStart(3, '0');
-                btn.className = 'py-2 border border-emerald-300 rounded-lg font-bold text-xs hover:bg-emerald-500 hover:text-white transition';
-                btn.innerText = formattedSBD;
-                btn.onclick = function() {
-                    document.getElementById('sbdInput').value = i;
-                    closeSbdGrid();
-                };
-                container.appendChild(btn);
-            }
-            document.getElementById('sbdModal').classList.remove('hidden');
-        }
-
-        function closeSbdGrid() {
-            document.getElementById('sbdModal').classList.add('hidden');
-        }
-
-        // Tải xuống file ZIP trọn gói mã nguồn
-        function downloadZipSource() {
-            const zip = new JSZip();
-            const pageCode = document.documentElement.outerHTML;
-            zip.file("index.html", pageCode);
-            zip.generateAsync({ type: "blob" }).then(function(content) {
-                saveAs(content, "DauTruongTriThuc_TayNinh.zip");
-            });
-        }
-    </script>
-</body>
-  </html>
-  
+let player={name:"",sbd:0};
+let current=0,score=0,timeLeft=20,timerId=null,locked=false;
+const pages=["home","rules","register","game","result","ranking","host","library"];
+function showPage(id){
+ clearInterval(timerId);
+ pages.forEach(p=>document.getElementById(p).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ if(id==="ranking")renderRanking();
+ if(id==="host")updateStats();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function registerPlayer(){
+ const name=document.getElementById("playerName").value.trim();
+ const sbd=Number(document.getElementById("playerSbd").value);
+ const error=document.getElementById("registerError");
+ if(!name){error.textContent="Vui lòng nhập họ tên.";return}
+ if(!Number.isInteger(sbd)||sbd<1||sbd>100){error.textContent="SBD phải là số nguyên từ 1 đến 100.";return}
+ player={name,sbd};
+ current=0;score=0;
+ startQuestion();
+ showPage("game");
+}
+function startQuestion(){
+ locked=false;timeLeft=20;
+ const q=questions[current];
+ document.getElementById("playerBadge").textContent=
+ player.name+" • SBD "+String(player.sbd).padStart(3,"0");
+ document.getElementById("questionNumber").textContent=
+ "CÂU "+(current+1)+"/"+questions.length;
+ document.getElementById("questionText").textContent=q.q;
+ document.getElementById("progressBar").style.width=(current/questions.length*100)+"%";
+ document.getElementById("feedback").textContent="";
+ document.getElementById("nextButton").classList.add("hidden");
+ document.getElementById("answerList").innerHTML="";
+ q.a.forEach((answer,i)=>{
+  const btn=document.createElement("button");
+  btn.className="answer";
+  btn.innerHTML="<b>"+String.fromCharCode(65+i)+". </b>"+escapeHTML(answer);
+  btn.onclick=()=>chooseAnswer(i);
+  document.getElementById("answerList").appendChild(btn);
+ });
+ updateTimer();
+ timerId=setInterval(()=>{
+  timeLeft--;updateTimer();
+  if(timeLeft<=0)timeUp();
+ },1000);
+}
+function updateTimer(){
+ document.getElementById("timer").textContent=timeLeft;
+ document.getElementById("timer").style.color=timeLeft<=5?"#ff6677":"#f6c75b";
+}
+function chooseAnswer(index){
+ if(locked)return;
+ locked=true;clearInterval(timerId);
+ const q=questions[current];
+ const buttons=document.querySelectorAll(".answer");
+ buttons.forEach((b,i)=>{
+  b.disabled=true;
+  if(i===q.c)b.classList.add("correct");
+  else if(i===index)b.classList.add("wrong");
+ });
+ if(index===q.c){
+  score+=10;
+  document.getElementById("feedback").textContent="🎉 CHÍNH XÁC! +10 ĐIỂM";
+  document.getElementById("feedback").style.color="#54e5ad";
+  beep(720);
+ }else{
+  document.getElementById("feedback").textContent="Chưa chính xác! "+q.why;
+  document.getElementById("feedback").style.color="#ff9ca9";
+  beep(220);
+ }
+ document.getElementById("nextButton").classList.remove("hidden");
+ document.getElementById("nextButton").textContent=
+ current===questions.length-1?"XEM KẾT QUẢ":"CÂU TIẾP THEO →";
+}
+function timeUp(){
+ if(locked)return;
+ locked=true;clearInterval(timerId);
+ const q=questions[current];
+ document.querySelectorAll(".answer").forEach((b,i)=>{
+  b.disabled=true;if(i===q.c)b.classList.add("correct");
+ });
+ document.getElementById("feedback").textContent="⏰ HẾT GIỜ! "+q.why;
+ document.getElementById("feedback").style.color="#ffb4bd";
+ document.getElementById("nextButton").classList.remove("hidden");
+ document.getElementById("nextButton").textContent=
+ current===questions.length-1?"XEM KẾT QUẢ":"CÂU TIẾP THEO →";
+}
+function nextQuestion(){
+ if(!locked)return;
+ current++;
+ if(current>=questions.length){finishGame();return}
+ startQuestion();
+}
+function finishGame(){
+ clearInterval(timerId);
+ document.getElementById("progressBar").style.width="100%";
+ document.getElementById("resultName").textContent=
+ player.name+" • SBD "+String(player.sbd).padStart(3,"0");
+ document.getElementById("finalScore").textContent=score;
+ document.getElementById("resultMessage").textContent=
+ score===100?"Xuất sắc! Bạn đã chinh phục toàn bộ thử thách!":
+ score>=70?"Rất tốt! Bạn có kiến thức lịch sử đáng tự hào!":
+ score>=40?"Khá tốt! Hãy tiếp tục tìm hiểu lịch sử Tây Ninh nhé!":
+ "Cảm ơn bạn đã tham gia. Hãy ôn tập và thử sức lần nữa!";
+ saveResult();
+ showPage("result");
+}
+function getResults(){
+ try{return JSON.parse(localStorage.getItem("tayNinhScores")||"[]")}
+ catch(e){return []}
+}
+function saveResult(){
+ const data=getResults();
+ data.push({name:player.name,sbd:player.sbd,score:score,date:new Date().toLocaleString("vi-VN")});
+ data.sort((a,b)=>b.score-a.score);
+ localStorage.setItem("tayNinhScores",JSON.stringify(data.slice(0,100)));
+}
+function renderRanking(){
+ const data=getResults();
+ const body=document.getElementById("rankingBody");
+ body.innerHTML="";
+ document.getElementById("emptyRanking").classList.toggle("hidden",data.length>0);
+ data.forEach((p,i)=>{
+  const tr=document.createElement("tr");
+  const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1;
+  tr.innerHTML="<td>"+medal+"</td><td>"+escapeHTML(p.name)+"</td><td>"+String(p.sbd).padStart(3,"0")+"</td><td><b>"+p.score+"</b></td>";
+  body.appendChild(tr);
+ });
+}
+function updateStats(){
+ document.getElementById("totalPlayers").textContent=getResults().length;
+}
+function resetRanking(){
+ if(confirm("Em có chắc muốn xóa toàn bộ kết quả trên thiết bị này?")){
+  localS  
